@@ -740,6 +740,21 @@ func (ids *idService) consumeMessage(mes *pb.Identify, c network.Conn, isPush bo
 	signedPeerRecord, err := signedPeerRecordFromMessage(mes)
 	if err != nil {
 		log.Errorf("error getting peer record from Identify message: %v", err)
+	} else {
+		cab, ok := peerstore.GetCertifiedAddrBook(ids.Host.Peerstore())
+		if !ok {
+			log.Error("peerstore does not implement CertifiedAddrBook")
+		}
+		accepted, err := cab.ConsumePeerRecord(signedPeerRecord, peerstore.PermanentAddrTTL)
+		if err != nil {
+			log.Errorf("error adding signed peer record: %s", err)
+		}
+
+		if accepted {
+			log.Debugf("Peer %s signed peer record: %s", ids.Host.ID(), signedPeerRecord)
+		} else {
+			log.Errorf("Peer %s has no signed peer record", ids.Host.ID())
+		}
 	}
 
 	// Extend the TTLs on the known (probably) good addresses.
