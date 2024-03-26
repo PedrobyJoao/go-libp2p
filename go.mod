@@ -1,4 +1,4 @@
-module github.com/libp2p/go-libp2p
+module github.com/PedrobyJoao/go-libp2p
 
 go 1.21
 
