@@ -751,9 +751,9 @@ func (ids *idService) consumeMessage(mes *pb.Identify, c network.Conn, isPush bo
 		}
 
 		if accepted {
-			log.Debugf("Peer %s signed peer record: %s", ids.Host.ID(), signedPeerRecord)
+			log.Debugf("Signed peer record was consumed for peer %s", ids.Host.ID())
 		} else {
-			log.Errorf("Peer %s has no signed peer record", ids.Host.ID())
+			log.Errorf("ConsumePeerRecord was not accepted for peer %s", ids.Host.ID())
 		}
 	}
 
